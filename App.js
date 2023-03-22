@@ -4,6 +4,7 @@ import * as Font from 'expo-font'
 import { TailwindProvider } from 'tailwindcss-react-native'
 import { AuthProvider } from './app/providers/AuthProvider'
 import AuthScreen from './app/screens/AuthScreen/AuthScreen'
+import HomeScreen from './app/screens/HomeScreen'
 import LauncherScreen from './app/screens/LauncherScreen'
 Font.loadAsync({
 	'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
@@ -17,7 +18,7 @@ export default function App() {
 		<TailwindProvider>
 			<NavigationContainer>
 				<AuthProvider>
-					<Stack.Navigator initialRouteName='AuthScreen'>
+					<Stack.Navigator initialRouteName='Home'>
 						<Stack.Screen
 							options={{ headerShown: false }}
 							name='Launcher'
@@ -25,8 +26,13 @@ export default function App() {
 						/>
 						<Stack.Screen
 							options={{ headerShown: false }}
-							name='AuthScreen'
+							name='Auth'
 							component={AuthScreen}
+						/>
+						<Stack.Screen
+							options={{ headerShown: false }}
+							name='Home'
+							component={HomeScreen}
 						/>
 					</Stack.Navigator>
 				</AuthProvider>
