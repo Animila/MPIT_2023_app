@@ -18,7 +18,7 @@ export default function App() {
 		<TailwindProvider>
 			<NavigationContainer>
 				<AuthProvider>
-					<Stack.Navigator initialRouteName='Home'>
+					<Stack.Navigator initialRouteName='Launcher'>
 						<Stack.Screen
 							options={{ headerShown: false }}
 							name='Launcher'

@@ -1,5 +1,6 @@
 import React from 'react'
 import { Image, Text, TextInput, View } from 'react-native'
+import StarRating from './StarRating'
 
 const Card = ({ card }) => {
 	return (
@@ -45,23 +46,7 @@ const Card = ({ card }) => {
 				</View>
 				<View className='px-auto' pointerEvents='none'>
 					<View className='h-[65px] rounded-[21px] px-[10px] text-[16px] text-winter_2 mt-[14px] mx-[3px] bg-white text-center flex flex-row justify-center items-center'>
-						{[...Array(card.rating)].map(() => (
-							<>
-								<Image
-									className='mx-[5px]'
-									source={require('../../assets/images/star.png')}
-								/>
-							</>
-						))}
-						{card.rating < 5 &&
-							[...Array(5 - card.rating)].map(() => (
-								<>
-									<Image
-										className='mx-[5px]'
-										source={require('../../assets/images/star_empty.png')}
-									/>
-								</>
-							))}
+						<StarRating card={card} />
 					</View>
 				</View>
 			</View>

@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
 		// проверка что пользователь авторизован
 		const bootstrapAsync = async () => {
 			const apiKey = await AsyncStorage.getItem('apiKey')
-			axios.defaults.baseURL = 'https://api.hackaton-yakse.ru/api'
+			axios.defaults.baseURL = 'https://hackaton-yakse.ru/api'
 
 			try {
 				if (apiKey) {
@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
 	}, [])
 
 	const registerHandler = async (firstName, lastName, tel, password) => {
-		axios.defaults.baseURL = 'https://api.hackaton-yakse.ru/api'
+		axios.defaults.baseURL = 'https://hackaton-yakse.ru/api'
 		setIsLoading(true)
 		try {
 			const response = await axios.post('/register', {
@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }) => {
 		}
 	}
 	const loginHandler = async (email, password) => {
-		axios.defaults.baseURL = 'https://api.hackaton-yakse.ru/api'
+		axios.defaults.baseURL = 'https://hackaton-yakse.ru/api'
 		setIsLoading(true)
 		try {
 			const response = await axios.post('/login', { email, password })

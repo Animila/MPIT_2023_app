@@ -17,6 +17,7 @@ module.exports = {
 				sun_5: '#66DBFE',
 				black: '#000',
 				white: '#fff',
+				btn: '#1A6FEE',
 			},
 			fontFamily: {
 				sans: ['Roboto-Regular', 'sans-serif'],

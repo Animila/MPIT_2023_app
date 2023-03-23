@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { Alert, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
 import SwipeCards from 'react-native-swipe-cards'
 import Card from '../../components/Card'
 
-const Cards = () => {
+const Cards = props => {
 	const [cards, setCards] = useState([
 		{
 			id: 1,
@@ -67,12 +67,10 @@ const Cards = () => {
 		},
 	])
 
-	const handleYup = card => {
-		Alert.alert(card.title)
-	}
+	const handleYup = card => {}
 
 	const handleNope = card => {
-		Alert.alert(card.place)
+		// Alert.alert(card.place)
 	}
 
 	return (

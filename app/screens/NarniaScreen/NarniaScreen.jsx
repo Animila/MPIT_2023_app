@@ -4,7 +4,7 @@ import Cards from './Cards'
 
 const NarniaScreen = () => {
 	return (
-		<View style={{ flex: 1 }}>
+		<View style={{ flex: 1 }} className='relative'>
 			<Cards />
 		</View>
 	)

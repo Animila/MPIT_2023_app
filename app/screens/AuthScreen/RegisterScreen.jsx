@@ -18,7 +18,6 @@ const RegisterModal = ({ data, setData }) => {
 				placeholder='Имя'
 				keyboardType='default'
 				inputMode='text'
-				secureTextEntry={true}
 				value={data.firstName}
 				onChange={event =>
 					setData({ ...data, firstName: event.nativeEvent.text })
@@ -29,7 +28,6 @@ const RegisterModal = ({ data, setData }) => {
 				placeholder='Фамилия'
 				keyboardType='default'
 				inputMode='text'
-				secureTextEntry={true}
 				value={data.lastName}
 				onChange={event =>
 					setData({ ...data, lastName: event.nativeEvent.text })

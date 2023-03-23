@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import React from 'react'
 import { Image, View } from 'react-native'
-import CabinetScreen from './CabinetScreen/CabinetScreen'
+import CabinaetScreem from './CabinetScreen/CabinaetScreem'
 import MapScreen from './MapScreen/MapScreen'
 import NarniaScreen from './NarniaScreen/NarniaScreen'
 
@@ -59,7 +59,7 @@ const HomeScreen = () => {
 					),
 				}}
 				name='Аккаунт'
-				component={CabinetScreen}
+				component={CabinaetScreem}
 			/>
 		</Tab.Navigator>
 	)

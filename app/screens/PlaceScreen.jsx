@@ -1,12 +1,12 @@
 import React from 'react'
 import { Text, View } from 'react-native'
 
-const CabinetScreen = () => {
+const PlaceScreen = ({ card }) => {
 	return (
 		<View>
-			<Text>CabinetScreen</Text>
+			<Text>{card.title}</Text>
 		</View>
 	)
 }
 
-export default CabinetScreen
+export default PlaceScreen
