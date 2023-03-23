@@ -163,7 +163,7 @@ export default function MapScreen() {
 			>
 				{data.map((marker, index) => (
 					<View
-						className='bg-[#fff] mx-[10px] shadow-[#000] h-[220px] w-[400px] overflow-hidden rounded-tl-lg'
+						className='bg-[#fff] mx-[10px] shadow-[#000] h-[220px] w-[400px] overflow-hidden rounded-tl-lg rounded-tr-lg'
 						style={{
 							shadowOffset: 'x: 2, y: -2',
 							shadowOpacity: 0.3,
