@@ -1,20 +1,35 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useNavigation } from '@react-navigation/native'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Image, View } from 'react-native'
 import { useAuth } from '../hooks/useAuth'
 
 const LauncherScreen = () => {
 	const navigation = useNavigation()
-	const { isLoading, user } = useAuth()
+	const { check, isLoading } = useAuth()
+	const [isAuth, setIsAuth] = useState(false)
+
 	useEffect(() => {
-		setTimeout(() => {
-			if (!isLoading && user) {
-				navigation.replace('Home')
-			} else {
-				navigation.replace('Auth')
+		const fetchData = async () => {
+			check()
+			const checked = await AsyncStorage.getItem('user')
+			const user = JSON.parse(checked)
+
+			console.log(user)
+			if (user) {
+				setIsAuth(true)
 			}
-		}, 3000)
+		}
+		fetchData()
 	}, [])
+
+	useEffect(() => {
+		if (isAuth) {
+			navigation.replace('Home')
+		} else {
+			navigation.replace('Auth')
+		}
+	}, [isAuth])
 	return (
 		<View className='w-screen h-full flex flex-col justify-center items-center'>
 			<Image

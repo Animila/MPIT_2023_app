@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useState } from 'react'
-import { Text, TouchableWithoutFeedback, View } from 'react-native'
+import { Alert, Text, TouchableWithoutFeedback, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useAuth } from '../../hooks/useAuth'
 import LoginModal from './LoginModal'
@@ -15,13 +15,15 @@ const AuthScreen = () => {
 	const authHandler = async () => {
 		const { firstName, lastName, tel, password } = data
 		if (isReg) await register(firstName, lastName, tel, password, 1)
-		else await navigation.replace('Home') // login(tel, password)
+		else await login(tel, password) // login(tel, password)
 
 		setData({})
 
-		// if (!isLoading && user) {
-		// 	navigation.replace('Home')
-		// }
+		if (!isLoading && user) {
+			navigation.replace('Home')
+		} else {
+			Alert.alert('ошибка')
+		}
 	}
 
 	return (

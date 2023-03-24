@@ -10,22 +10,24 @@ export const AuthProvider = ({ children }) => {
 	const [isLoadingInitial, setIsLoadingInitial] = useState(true)
 	const [isLoading, setIsLoading] = useState(false)
 
+	const bootstrapAsync = async () => {
+		const apiKey = await AsyncStorage.getItem('apiKey')
+		console.log(apiKey)
+		axios.defaults.baseURL = 'https://hackaton-yakse.ru/api'
+		try {
+			if (apiKey) {
+				authHandler(apiKey)
+			}
+		} catch (e) {
+			Alert.alert('Ошибка при загрузке профиля: ', e.message)
+			await AsyncStorage.removeItem('user')
+		} finally {
+			setIsLoadingInitial(false)
+		}
+	}
+
 	useEffect(() => {
 		// проверка что пользователь авторизован
-		const bootstrapAsync = async () => {
-			const apiKey = await AsyncStorage.getItem('apiKey')
-			axios.defaults.baseURL = 'https://hackaton-yakse.ru/api'
-
-			try {
-				if (apiKey) {
-					authHandler(apiKey)
-				}
-			} catch (e) {
-				Alert.alert('Ошибка при загрузке профиля: ', e.message)
-			} finally {
-				setIsLoadingInitial(false)
-			}
-		}
 
 		bootstrapAsync()
 	}, [])
@@ -48,11 +50,11 @@ export const AuthProvider = ({ children }) => {
 			setIsLoading(false)
 		}
 	}
-	const loginHandler = async (email, password) => {
+	const loginHandler = async (tel, password) => {
 		axios.defaults.baseURL = 'https://hackaton-yakse.ru/api'
 		setIsLoading(true)
 		try {
-			const response = await axios.post('/login', { email, password })
+			const response = await axios.post('/login', { tel, password })
 			const apiKey = response.data.token
 			await AsyncStorage.setItem('apiKey', apiKey)
 		} catch (error) {
@@ -80,8 +82,10 @@ export const AuthProvider = ({ children }) => {
 		try {
 			const getUser = await axios.get('/user', { apiKey })
 			setUser(getUser.data)
+			await AsyncStorage.setItem('user', JSON.stringify(getUser.data))
 			setIsLoadingInitial(false)
 		} catch (error) {
+			await AsyncStorage.removeItem('user')
 			Alert.alert('Ошибка при загрузке профиля: ', error.message)
 		}
 	}
@@ -93,6 +97,7 @@ export const AuthProvider = ({ children }) => {
 			login: loginHandler,
 			logout: logoutHandler,
 			register: registerHandler,
+			check: bootstrapAsync,
 		}
 	}, [user, isLoading])
 

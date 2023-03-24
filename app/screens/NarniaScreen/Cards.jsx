@@ -78,12 +78,13 @@ const Cards = props => {
 			cards={cards}
 			renderCard={cardData => <Card card={cardData} />}
 			renderNoMoreCards={() => (
-				<View className='flex flex-col justify-center items-center w-screen h-screen'>
+				<View className='flex flex- col justify-center items-center w-screen h-screen'>
 					<Text>Конец карточек</Text>
 				</View>
 			)}
 			handleYup={handleYup}
 			handleNope={handleNope}
+			useNativeDriver={true}
 		/>
 	)
 }

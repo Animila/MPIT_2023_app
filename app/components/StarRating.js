@@ -6,14 +6,16 @@ const StarRating = ({ card }) => {
 		<>
 			{card.ratings ? (
 				<>
-					{[...Array(card.ratings)].map(val => (
+					{[...Array(card.ratings)].map((val, index) => (
 						<Image
+							key={index}
 							className='mx-[5px] h-[25px] w-[25px]'
 							source={require('../../assets/images/star.png')}
 						/>
 					))}
-					{[...Array(5 - card.ratings)].map(val => (
+					{[...Array(5 - card.ratings)].map((val, index) => (
 						<Image
+							key={index}
 							className='mx-[5px] h-[25px] w-[25px]'
 							source={require('../../assets/images/star_empty.png')}
 						/>

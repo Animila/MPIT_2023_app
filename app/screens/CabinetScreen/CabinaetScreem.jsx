@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import React, { useEffect, useState } from 'react'
 import {
 	Image,
 	Text,
@@ -9,13 +10,21 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 const CabinaetScreem = () => {
-	const [data, setData] = useState({
-		firstName: 'Илья',
-		lastName: 'христофоров',
-		base: 3,
-		coin: 234,
-		tel: '12345',
-	})
+	const [data, setData] = useState({})
+
+	useEffect(() => {
+		const getUserData = async () => {
+			const user = await AsyncStorage.getItem('user')
+			if (user) {
+				setData(JSON.parse(user))
+			}
+		}
+		getUserData()
+	}, [])
+
+	const saveUserData = async () => {
+		await AsyncStorage.setItem('user', JSON.stringify(data))
+	}
 	return (
 		<SafeAreaView>
 			<View>
