@@ -10,7 +10,7 @@ import {
 } from 'react-native'
 import MapView, { Callout, Marker } from 'react-native-maps'
 import data from '../../../data'
-import StarRating from '../../components/StarRating'
+import CardList from '../../components/Map/CardList'
 
 export default function MapScreen() {
 	const [location, setLocation] = useState({
@@ -143,58 +143,7 @@ export default function MapScreen() {
 					</TouchableOpacity>
 				))}
 			</ScrollView>
-			<Animated.ScrollView
-				horizontal
-				scrollEventThrottle={1}
-				showsHorizontalScrollIndicator={false}
-				className='absolute bottom-0 left-0 right-0 py-[10px]'
-				onScroll={Animated.event(
-					[
-						{
-							nativeEvent: {
-								contentOffset: {
-									x: mapAnimation,
-								},
-							},
-						},
-					],
-					{ useNativeDriver: true }
-				)}
-			>
-				{data.map((marker, index) => (
-					<View
-						className='bg-[#fff] mx-[10px] shadow-[#000] h-[220px] w-[400px] overflow-hidden rounded-tl-lg rounded-tr-lg'
-						style={{
-							shadowOffset: 'x: 2, y: -2',
-							shadowOpacity: 0.3,
-							shadowRadius: 5,
-							elevation: 2,
-						}}
-						key={index}
-					>
-						<Image
-							source={marker.img}
-							className='flex-3 w-full h-[100px] self-center'
-							resizeMode='cover'
-						/>
-						<View className='flex-2 p-[10px]'>
-							<Text
-								numberOfLines={1}
-								className='text-[12px] font-sans-bold font-[700]'
-							>
-								{marker.title}
-							</Text>
-							<View className='flex flex-row justify-start items-center'>
-								<StarRating card={marker} />
-							</View>
-
-							<Text numberOfLines={2} className='text-[12px] text-[#444] '>
-								{marker.description}
-							</Text>
-						</View>
-					</View>
-				))}
-			</Animated.ScrollView>
+			<CardList data={data} mapAnimation={mapAnimation} />
 		</View>
 	)
 }
