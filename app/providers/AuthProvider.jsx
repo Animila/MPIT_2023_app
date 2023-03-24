@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useNavigation } from '@react-navigation/core'
 import axios from 'axios'
 import React, { createContext, useEffect, useMemo, useState } from 'react'
 import { Alert } from 'react-native'
@@ -6,6 +7,7 @@ import { Alert } from 'react-native'
 export const AuthContext = createContext({})
 
 export const AuthProvider = ({ children }) => {
+	const navigation = useNavigation()
 	const [user, setUser] = useState(null)
 	const [isLoadingInitial, setIsLoadingInitial] = useState(true)
 	const [isLoading, setIsLoading] = useState(false)
@@ -27,8 +29,6 @@ export const AuthProvider = ({ children }) => {
 	}
 
 	useEffect(() => {
-		// проверка что пользователь авторизован
-
 		bootstrapAsync()
 	}, [])
 
@@ -57,6 +57,7 @@ export const AuthProvider = ({ children }) => {
 			const response = await axios.post('/login', { tel, password })
 			const apiKey = response.data.token
 			await AsyncStorage.setItem('apiKey', apiKey)
+			console.log('авторизация: ' + apiKey)
 		} catch (error) {
 			Alert.alert('Ошибка авторизации: ', error.message)
 		} finally {
@@ -68,7 +69,9 @@ export const AuthProvider = ({ children }) => {
 		setIsLoading(true)
 		try {
 			await AsyncStorage.removeItem('apiKey')
+			await AsyncStorage.removeItem('user')
 			setUser(null)
+			navigation.replace('Auth')
 		} catch (error) {
 			Alert.alert('Ошибка при выходе: ', error.message)
 		} finally {

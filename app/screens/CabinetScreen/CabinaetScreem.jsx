@@ -8,8 +8,10 @@ import {
 	View,
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { useAuth } from '../../hooks/useAuth'
 
 const CabinaetScreem = () => {
+	const { logout } = useAuth()
 	const [data, setData] = useState({})
 
 	useEffect(() => {
@@ -71,9 +73,13 @@ const CabinaetScreem = () => {
 					<Text>TourTrip Coin</Text>
 					<Text>{data.coin}</Text>
 				</View>
-				<TouchableWithoutFeedback>
+				<TouchableWithoutFeedback
+					onPress={() => {
+						logout
+					}}
+				>
 					<View className='min-h-[56px] w-full mt-[30px] justify-center items-center bg-btn rounded-[10px] '>
-						<Text className='text-white text-center '>Сохранить</Text>
+						<Text className='text-white text-center '>Выйти</Text>
 					</View>
 				</TouchableWithoutFeedback>
 			</View>

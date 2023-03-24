@@ -15,11 +15,10 @@ const AuthScreen = () => {
 	const authHandler = async () => {
 		const { firstName, lastName, tel, password } = data
 		if (isReg) await register(firstName, lastName, tel, password, 1)
-		else await login(tel, password) // login(tel, password)
-
+		else await login(tel, password)
 		setData({})
-
-		if (!isLoading && user) {
+		console.log(user)
+		if (user) {
 			navigation.replace('Home')
 		} else {
 			Alert.alert('ошибка')
