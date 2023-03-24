@@ -1,16 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import {
-	Animated,
-	Image,
-	ScrollView,
-	Text,
-	TextInput,
-	TouchableOpacity,
-	View,
-} from 'react-native'
+import { Animated, Image, Text, View } from 'react-native'
 import MapView, { Callout, Marker } from 'react-native-maps'
 import data from '../../../data'
 import CardList from '../../components/Map/CardList'
+import Search from '../../components/Map/Search'
 
 export default function MapScreen() {
 	const [location, setLocation] = useState({
@@ -21,7 +14,6 @@ export default function MapScreen() {
 	const LONGITUDE_DELTA = 34.0388
 	const [markers, setMarkers] = useState([])
 
-	let mapIndex = 0
 	let mapAnimation = new Animated.Value(0)
 
 	const region = {
@@ -32,58 +24,12 @@ export default function MapScreen() {
 	}
 
 	useEffect(() => {
-		mapAnimation.addListener(({ value }) => {
-			let index = Math.floor(value / 220 + 0.3)
-			if (index >= markers.length) {
-				index = markers.length - 1
-			}
-			if (index <= 0) {
-				index = 0
-			}
-
-			clearTimeout(regionTimeout)
-
-			const regionTimeout = setTimeout(() => {
-				if (mapIndex != index) {
-					mapIndex = index
-					const { coordinate } = markers[index]
-					_map.current.animateToRegion(
-						{
-							...coordinate,
-							latitudeDelta: region.latitudeDelta,
-							longitudeDelta: region.longitudeDelta,
-						},
-						350
-					)
-				}
-			}, 10)
-		})
-	})
-
-	const _map = React.useRef(null)
-
-	const category = [
-		{
-			name: '10 км',
-		},
-		{
-			name: '20 км',
-		},
-		{
-			name: '30 км',
-		},
-		{
-			name: '40 км',
-		},
-	]
-
-	useEffect(() => {
 		setMarkers(data)
 	}, [])
 
 	return (
 		<View className='flex-1 bg-[#fff] items-center justify-center relative'>
-			<MapView ref={_map} className='h-full w-full' initialRegion={region}>
+			<MapView className='h-full w-full' initialRegion={region}>
 				{markers.map((marker, index) => (
 					<Marker
 						key={index}
@@ -96,53 +42,14 @@ export default function MapScreen() {
 						<Callout>
 							<View className='self-start flex-row width-[150px] p-[15px]'>
 								<Text>{marker.title}</Text>
-								<Image
-									source={'/assets/images/4841.jpg'}
-									className='w-[120px] h-[80px]'
-								/>
+								<Image source={marker.img} className='w-[120px] h-[80px]' />
 							</View>
 						</Callout>
 					</Marker>
 				))}
 			</MapView>
-			<View
-				className='absolute top-[20px] mt-[30px] flex-row bg-[#fff] w-[90%] self-center p-[10] shadow-[#ccc] rounded-[10px] pl-3 py-1'
-				style={{
-					shadowOffset: 'width: 0, height: 3',
-					shadowOpacity: 0.5,
-					shadowRadius: 5,
-					elevation: 10,
-				}}
-			>
-				<TextInput
-					placeholder='Поиск'
-					placeholderTextColor='#000'
-					autoCapitalize='none'
-					style={{ flex: 1, padding: 0 }}
-				/>
-			</View>
-			<ScrollView
-				horizontal
-				scrollEventThrottle={1}
-				showsHorizontalScrollIndicator={false}
-				height={50}
-				className='absolute top-[100px] px-[10px]'
-			>
-				{category.map((cat, index) => (
-					<TouchableOpacity
-						key={index}
-						className='flex flex-row bg-[#fff] rounded-[20px] p-2 px-[20px] mx-[10px] h-[35px] shadow-[#ccc] '
-						style={{
-							shadowOffset: 'width: 0, height: 3',
-							shadowOpacity: 0.5,
-							shadowRadius: 5,
-							elevation: 10,
-						}}
-					>
-						<Text>{cat.name}</Text>
-					</TouchableOpacity>
-				))}
-			</ScrollView>
+			<Search />
+
 			<CardList data={data} mapAnimation={mapAnimation} />
 		</View>
 	)
