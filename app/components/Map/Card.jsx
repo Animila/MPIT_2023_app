@@ -14,7 +14,9 @@ const Card = ({ marker }) => {
 			}}
 		>
 			<Image
-				source={marker.img}
+				source={{
+					uri: marker.url,
+				}}
 				className='flex-3 w-full h-[100px] self-center'
 				resizeMode='cover'
 			/>

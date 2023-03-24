@@ -1,56 +1,84 @@
 import React, { useEffect, useState } from 'react'
-import { Animated, Image, Text, View } from 'react-native'
-import MapView, { Callout, Marker } from 'react-native-maps'
-import data from '../../../data'
+import { Animated, Text, View } from 'react-native'
 import CardList from '../../components/Map/CardList'
+import Map from '../../components/Map/Map'
 import Search from '../../components/Map/Search'
+import { PlaceService } from '../../service/PlaceService'
+import { RatingService } from '../../service/RatingService'
 
 export default function MapScreen() {
-	const [location, setLocation] = useState({
-		latitude: 62.025461,
-		longitude: 129.705475,
-	})
-	const LATITUDE_DELTA = 23.0295
-	const LONGITUDE_DELTA = 34.0388
+	const LATITUDE_DELTA = 0.014
+	const LONGITUDE_DELTA = 5.019
 	const [markers, setMarkers] = useState([])
+	const [isLoading, setIsLoading] = useState(false)
 
+	const mapViewRef = React.createRef()
 	let mapAnimation = new Animated.Value(0)
 
+	const handleCardPress = marker => {
+		mapViewRef.current.animateToRegion(
+			{
+				latitude: marker.latitude,
+				longitude: marker.longitude,
+				latitudeDelta: LATITUDE_DELTA,
+				longitudeDelta: LONGITUDE_DELTA,
+			},
+			1000
+		)
+	}
+
 	const region = {
-		latitude: 64.0042, // средняя широта Якутии
-		longitude: 129.7325, // средняя долгота Якутии
+		latitude: 62.027216, // Широта г. Якутск
+		longitude: 129.732086,
 		latitudeDelta: LATITUDE_DELTA,
 		longitudeDelta: LONGITUDE_DELTA,
 	}
 
+	const getRating = ratings => {
+		if (!ratings || !ratings.length) {
+			return 0
+		}
+		const sum = ratings.reduce((acc, cur) => acc + cur, 0)
+		const average = sum / ratings.length
+		const result = parseInt(Math.round(average * 10) / 10)
+		console.log(result)
+
+		return result
+	}
+
 	useEffect(() => {
-		setMarkers(data)
+		const fetchData = async () => {
+			setIsLoading(true)
+			const base = await PlaceService.getAll()
+
+			const ratingPromises = base.map(item =>
+				RatingService.getForPlace(item.id)
+			)
+			const ratingsArrays = await Promise.all(ratingPromises)
+			const ratings = ratingsArrays.map(arr => arr.map(r => r.rating))
+
+			const markedBase = base.map((item, index) => ({
+				...item,
+				reviews: ratings[index].length,
+				ratings: getRating(ratings[index]),
+			}))
+			setMarkers(markedBase)
+			setIsLoading(false)
+		}
+		fetchData()
 	}, [])
 
 	return (
 		<View className='flex-1 bg-[#fff] items-center justify-center relative'>
-			<MapView className='h-full w-full' initialRegion={region}>
-				{markers.map((marker, index) => (
-					<Marker
-						key={index}
-						coordinate={{
-							latitude: marker.latitude,
-							longitude: marker.longitude,
-						}}
-						title={marker.title}
-					>
-						<Callout>
-							<View className='self-start flex-row width-[150px] p-[15px]'>
-								<Text>{marker.title}</Text>
-								<Image source={marker.img} className='w-[120px] h-[80px]' />
-							</View>
-						</Callout>
-					</Marker>
-				))}
-			</MapView>
+			{!isLoading ? (
+				<>
+					<Map mapViewRef={mapViewRef} region={region} markers={markers} />
+					<CardList data={markers} mapAnimation={mapAnimation} />
+				</>
+			) : (
+				<Text>Загрузка данных</Text>
+			)}
 			<Search />
-
-			<CardList data={data} mapAnimation={mapAnimation} />
 		</View>
 	)
 }

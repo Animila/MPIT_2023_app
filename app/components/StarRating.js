@@ -1,25 +1,28 @@
 import React from 'react'
 import { Image, Text } from 'react-native'
 
-const StarRating = props => {
+const StarRating = ({ card }) => {
 	return (
 		<>
-			{[...Array(props.card.rating)].map((val, index) => (
-				<Image
-					key={index}
-					className='mx-[5px] h-[25px] w-[25px]'
-					source={require('../../assets/images/star.png')}
-				/>
-			))}
-			{props.card.rating < 5 &&
-				[...Array(5 - props.card.rating)].map((val, index) => (
-					<Image
-						key={index}
-						className='mx-[5px] h-[25px] w-[25px]'
-						source={require('../../assets/images/star_empty.png')}
-					/>
-				))}
-			{props.card.reviews && <Text>({props.card.reviews})</Text>}
+			{card.ratings ? (
+				<>
+					{[...Array(card.ratings)].map(val => (
+						<Image
+							className='mx-[5px] h-[25px] w-[25px]'
+							source={require('../../assets/images/star.png')}
+						/>
+					))}
+					{[...Array(5 - card.ratings)].map(val => (
+						<Image
+							className='mx-[5px] h-[25px] w-[25px]'
+							source={require('../../assets/images/star_empty.png')}
+						/>
+					))}
+				</>
+			) : (
+				<Text>Нет отзывов (0)</Text>
+			)}
+			{card.reviews && <Text>({card.reviews})</Text>}
 		</>
 	)
 }
